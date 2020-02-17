@@ -57,3 +57,10 @@ with gzip.open('/Users/akonovalov/tweets2.json.gz', 'rt') as fin:
     except EOFError:
         pass
 ```
+
+## References
+
+https://github.com/hougrammer/emoji_project
+[Are Emojis Predictable?](https://arxiv.org/pdf/1702.07285.pdf)
+[Hierarchical Geographical Modeling of User Locationsfrom Social Media Posts](https://storage.googleapis.com/pub-tools-public-publication-data/pdf/40840.pdf)
+[Learning to Extract Events from Knowledge Base Revisions](https://aritter.github.io/www17.pdf)
