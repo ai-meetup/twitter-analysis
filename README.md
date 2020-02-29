@@ -60,7 +60,15 @@ with gzip.open('/Users/akonovalov/tweets2.json.gz', 'rt') as fin:
 
 ## References
 
-https://github.com/hougrammer/emoji_project
-[Are Emojis Predictable?](https://arxiv.org/pdf/1702.07285.pdf)
-[Hierarchical Geographical Modeling of User Locationsfrom Social Media Posts](https://storage.googleapis.com/pub-tools-public-publication-data/pdf/40840.pdf)
-[Learning to Extract Events from Knowledge Base Revisions](https://aritter.github.io/www17.pdf)
+* Emojis & Sentiment
+  + https://github.com/hougrammer/emoji_project
+  + [Using millions of emoji occurrences to learn any-domain representations for detecting sentiment, emotion and sarcasm](https://arxiv.org/abs/1708.00524)
+  + [Multi-task Emoji Learning](http://ceur-ws.org/Vol-2130/paper2.pdf)
+  + [Are Emojis Predictable?](https://arxiv.org/pdf/1702.07285.pdf)
+  + [Twitter Sentiment Analysis via Bi-sense Emoji Embedding and Attention-based LSTM](https://arxiv.org/abs/1807.07961)
+  + [Using Neural Networks to Predict Emoji Usage from Twitter Data](https://pdfs.semanticscholar.org/4537/69b9e338a6ebf6026225515df8fb012a11e3.pdf)
+  + [Exploiting Deep Neural Networks for Tweet-based Emoji Prediction](http://ceur-ws.org/Vol-2244/paper_11.pdf)
+* Locations
+  + [Hierarchical Geographical Modeling of User Locationsfrom Social Media Posts](https://storage.googleapis.com/pub-tools-public-publication-data/pdf/40840.pdf)
+* Events
+  + [Learning to Extract Events from Knowledge Base Revisions](https://aritter.github.io/www17.pdf)
