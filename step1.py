@@ -3,9 +3,7 @@
 import csv
 import json
 import gzip
-import dateutil.parser as dateparser
 import langid
-import twokenize
 import unidecode
 
 from collections import namedtuple
@@ -121,6 +119,7 @@ with gzip.open('./tweets.json.gz', 'rt') as fin:
             del js['user']
 
             print(json.dumps({
+                'timestamp': js['timestamp_ms'],
                 'location': location_to_json(loc) if loc is not None else None,
                 'coordinates': coordinates,
                 'text': text
