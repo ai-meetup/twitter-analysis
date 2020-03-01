@@ -123,7 +123,7 @@ with gzip.open('./tweets.json.gz', 'rt') as fin:
                 'location': location_to_json(loc) if loc is not None else None,
                 'coordinates': coordinates,
                 'text': text
-            }, indent=2))
+            }))
 
     except StopIteration:
         pass
