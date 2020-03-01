@@ -24,16 +24,28 @@ def resolve_state_name(n):
             return state_name
     return None
 
+def location_to_json(loc):
+    if isinstance(loc, Country):
+        return {'type': 'Country', 'country': loc.country }
+    elif isinstance(loc, CityCountry):
+        return {'type': 'CityCountry', 'city': loc.city, 'country': loc.country }
+    elif isinstance(loc, USAState):
+        return {'type': 'USAState', 'state': loc.state }
+    elif isinstance(loc, USACityState):
+        return {'type': 'USACityState', 'city': loc.city, 'state': loc.state }
+    else:
+        assert False
+
 Country      = namedtuple('Country',     'country')
 CityCountry  = namedtuple('CityCountry', 'city country')
 USAState     = namedtuple('USState',     'state')
 USACityState = namedtuple('USCityState', 'city state')
 
+Coordinates  = namedtuple('Coordinates', 'coordinates')
+
 def resolve_location(loc):
     decoded_loc = unidecode.unidecode(loc).lower().strip()
     parts = [x.strip() for x in decoded_loc.split(',')]
-
-    print(parts)
 
     if len(parts) == 1:
         value, = tuple(parts)
@@ -44,13 +56,9 @@ def resolve_location(loc):
 
     elif len(parts) == 2:
         first, second = tuple(parts)
-
-        print("!!!", first, second, resolve_state_name(second))
         # State, USA
         if second == 'usa' or second == 'us':
             state = resolve_state_name(first)
-
-            print("!!!", state)
 
             if state is not None:
                 return USAState(state)
@@ -81,9 +89,11 @@ with gzip.open('./tweets.json.gz', 'rt') as fin:
             except:
                 continue
 
+            # Skip all retweets.
             if 'retweeted_status' in js and js['retweeted_status'] is not None:
                 continue
 
+            # Skip tweets without text.
             if 'extended_tweet' in js and js['extended_tweet'] is not None:
                 text = js['extended_tweet']['full_text']
             elif 'text' in js:
@@ -91,37 +101,30 @@ with gzip.open('./tweets.json.gz', 'rt') as fin:
             else:
                 continue
 
+            # Skip tweets in other languages than English.
             (predicted_language, _) = langid.classify(text)
             if not ('lang' in js and js['lang'] == 'en') or predicted_language != 'en':
                 continue
 
+            # Extract user location.
             if js['user']['location'] is not None:
-                loc = js['user']['location']
+                loc = resolve_location(js['user']['location'])
             else:
-                loc = "none"
+                loc = None
 
-            loc_is_good = False
-            if js['user']['location'] is not None:
-                loc = js['user']['location']
-                counter += 1
-                print(loc, resolve_location(loc))
+            if 'geo' in js and js['geo'] is not None:
+                assert js['geo']['type'] == 'Point'
+                coordinates = js['geo']['coordinates']
+            else:
+                coordinates = None
 
-                if counter == 10:
-                    assert False
+            del js['user']
 
-
-            # print(js['lang'])
-            # print(langid.classify(text))
-            # print(twokenize.tokenize(text))
-            # print(loc + "\t\t" + unidecode.unidecode(loc))
-
-            # print(js['user']['location'])
-            # del js['user']
-
-            # print(js['geo'])
-            # print(js['coordinates'])
-
-            # print(json.dumps(js, indent=2))
+            print(json.dumps({
+                'location': location_to_json(loc) if loc is not None else None,
+                'coordinates': coordinates,
+                'text': text
+            }, indent=2))
 
     except StopIteration:
         pass
